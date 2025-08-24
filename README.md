@@ -29,10 +29,15 @@ The model can identify the following plant types:
 ## 🚀 Quick Start
 
 ###  **Live Demo**
-Your API is ready for deployment!
-- **API Base URL**: `https://your-railway-app.railway.app`
-- **Interactive Documentation**: `https://your-railway-app.railway.app/docs`
-- **Health Check**: `https://your-railway-app.railway.app/health`
+Your API is now deployed and ready to use!
+- **API Base URL**: `http://web-production-f233.up.railway.app`
+- **Interactive Documentation**: `http://web-production-f233.up.railway.app/docs`
+- **Health Check**: `http://web-production-f233.up.railway.app/health`
+
+### 📥 **Model File Download**
+- **Google Drive Link**: [Download plant_species_Model.h5](https://drive.google.com/uc?id=1rKl_jRCbTixMHIOct95pLyta1Q5tPgrk)
+- **File Size**: ~295MB
+- **Required for**: Local development and testing
 
 ### Prerequisites
 
@@ -54,9 +59,10 @@ Your API is ready for deployment!
    pip install -r requirements.txt
    ```
 
-3. **Ensure the model file is present**
-   - The `plant_species_CNN.h5` model file should be in the root directory
-   - This is a trained ResNet50 model for plant classification
+3. **Model File Setup**
+   - **For Local Development**: Download the model file from [Google Drive](https://drive.google.com/uc?id=1rKl_jRCbTixMHIOct95pLyta1Q5tPgrk) and place `plant_species_Model.h5` in the root directory
+   - **For Deployment**: The model is automatically downloaded from Google Drive during deployment
+   - This is a trained ResNet50 model for plant classification (~295MB)
 
 ### Running the API Locally
 
@@ -66,10 +72,17 @@ Your API is ready for deployment!
    ```
 
 2. **Access the API**
+   
+   **Local Development:**
    - API will be available at: `http://localhost:8000`
    - Interactive documentation: `http://localhost:8000/docs`
    - Alternative docs: `http://localhost:8000/redoc`
    - Health check: `http://localhost:8000/health`
+   
+   **Live Deployment:**
+   - API is available at: `http://web-production-f233.up.railway.app`
+   - Interactive documentation: `http://web-production-f233.up.railway.app/docs`
+   - Health check: `http://web-production-f233.up.railway.app/health`
 
 ## 📖 API Documentation
 
@@ -142,13 +155,13 @@ Send base64 encoded image for plant classification.
 #### Using curl (Live API)
 ```bash
 # File upload
-curl -X POST "https://your-railway-app.railway.app/predict" \
+curl -X POST "http://web-production-f233.up.railway.app/predict" \
      -H "accept: application/json" \
      -H "Content-Type: multipart/form-data" \
      -F "file=@your_image.jpg"
 
 # Base64 image
-curl -X POST "https://your-railway-app.railway.app/predict-base64" \
+curl -X POST "http://web-production-f233.up.railway.app/predict-base64" \
      -H "accept: application/json" \
      -H "Content-Type: application/json" \
      -d '{"image": "base64_encoded_image_string"}'
@@ -161,7 +174,7 @@ import requests
 # File upload
 with open('your_image.jpg', 'rb') as f:
     files = {'file': f}
-    response = requests.post('https://your-railway-app.railway.app/predict', files=files)
+    response = requests.post('http://web-production-f233.up.railway.app/predict', files=files)
     result = response.json()
     print(f"Predicted: {result['predicted_class']}")
     print(f"Confidence: {result['confidence']}")
@@ -170,7 +183,7 @@ with open('your_image.jpg', 'rb') as f:
 import base64
 with open('your_image.jpg', 'rb') as f:
     image_data = base64.b64encode(f.read()).decode('utf-8')
-    response = requests.post('https://your-railway-app.railway.app/predict-base64', 
+    response = requests.post('http://web-production-f233.up.railway.app/predict-base64', 
                            json={'image': image_data})
     result = response.json()
     print(f"Predicted: {result['predicted_class']}")
@@ -221,7 +234,7 @@ with open('your_image.jpg', 'rb') as f:
 const formData = new FormData();
 formData.append('file', fileInput.files[0]);
 
-fetch('https://your-railway-app.railway.app/predict', {
+fetch('http://web-production-f233.up.railway.app/predict', {
     method: 'POST',
     body: formData
 })
@@ -235,7 +248,7 @@ fetch('https://your-railway-app.railway.app/predict', {
 const reader = new FileReader();
 reader.onload = function() {
     const base64Image = reader.result.split(',')[1];
-    fetch('https://your-railway-app.railway.app/predict-base64', {
+    fetch('http://web-production-f233.up.railway.app/predict-base64', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -262,22 +275,42 @@ python test_api.py path/to/your/image.jpg
 # Or modify the IMAGE_PATH variable in test_api.py
 ```
 
+### Testing with Sample Images
+
+You can test the API with any plant image. Here are some suggestions:
+- **Aloe Vera**: Images of aloe vera plants
+- **Snake Plant**: Sansevieria trifasciata images
+- **Jade Plant**: Crassula ovata images
+- **Money Tree**: Pachira aquatica images
+
+**Note**: For best results, use clear, well-lit images of the plant's leaves and overall structure.
+
 ## 🚀 Deployment
 
 ### Railway Deployment
 
-This project is configured for Railway deployment:
+This project is configured for Railway deployment with automatic model download:
 
 1. **Connect your GitHub repository to Railway**
 2. **Railway will automatically detect the Python project**
-3. **Deploy with one click**
+3. **The model file is automatically downloaded from Google Drive during deployment**
+4. **Deploy with one click**
+
+### Model File Management
+
+Due to the large size of the trained model (~295MB), it's not included in the repository. Instead:
+
+- **Local Development**: Download `plant_species_Model.h5` from [Google Drive](https://drive.google.com/uc?id=1rKl_jRCbTixMHIOct95pLyta1Q5tPgrk) and place it in the root directory
+- **Deployment**: The FastAPI app automatically downloads the model from Google Drive during startup
+- **Model Source**: The model is hosted on Google Drive for easy access and deployment
 
 ### Environment Variables
 
 The API uses the following environment variables:
 - `PORT`: Port number (automatically set by Railway)
-- `MODEL_PATH`: Path to the model file (default: `plant_species_CNN.h5`)
+- `MODEL_PATH`: Path to the model file (default: `plant_species_Model.h5`)
 - `CLASSES_PATH`: Path to classes JSON file (default: `plant_classes.json`)
+- `GOOGLE_DRIVE_MODEL_ID`: Google Drive file ID for model download (default: `1rKl_jRCbTixMHIOct95pLyta1Q5tPgrk`)
 
 ## 📁 Project Structure
 
@@ -287,12 +320,14 @@ Plant_CNN/
 ├── requirements.txt                 # Python dependencies and versions
 ├── Procfile                         # Railway deployment config
 ├── runtime.txt                      # Python runtime version (3.9.5)
-├── plant_species_CNN.h5            # Trained ResNet50 model
 ├── plant_classes.json              # Class mapping configuration
 ├── plant-species-classification-resnet50-eda.ipynb # Jupyter notebook for EDA
 ├── README.md                       # Project documentation
-└── DATA/                           # Training data directory
+├── DATA/                           # Training data directory
+└── plant_species_Model.h5            # Trained ResNet50 model (download from Google Drive)
 ```
+
+**Note**: The `plant_species_Model.h5` model file (~295MB) is not included in the repository due to size constraints. Download it from Google Drive for local development.
 
 ## 🔧 Model Information
 
@@ -309,7 +344,8 @@ Plant_CNN/
 
 1. Update the `plant_classes.json` file
 2. Retrain the model with new data
-3. Update the model file `plant_species_CNN.h5`
+3. Update the model file `plant_species_Model.h5`
+4. Upload the new model to Google Drive and update the file ID
 
 ### Model Training
 
@@ -317,7 +353,16 @@ The training process is documented in `plant-species-classification-resnet50-eda
 
 1. Prepare your dataset in the `DATA/` directory
 2. Run the Jupyter notebook
-3. Replace `plant_species_CNN.h5` with the new model
+3. Replace `plant_species_Model.h5` with the new model
+4. Update the Google Drive link in the code and documentation
+
+### Code Structure
+
+- **`app.py`**: Main FastAPI application with endpoints and model loading
+- **`plant_classes.json`**: Class mapping configuration
+- **`requirements.txt`**: Python dependencies
+- **`Procfile`**: Railway deployment configuration
+- **`runtime.txt`**: Python version specification
 
 ## 🤝 Contributing
 
@@ -357,12 +402,35 @@ If you encounter dependency conflicts:
 2. Activate it: `source venv/bin/activate` (Linux/macOS) or `venv\Scripts\activate` (Windows)
 3. Install dependencies: `pip install -r requirements.txt`
 
+### Model Download Issues
+If the model fails to download during deployment:
+1. Check your internet connection
+2. Verify the Google Drive link is accessible
+3. Ensure the file ID is correct: `1rKl_jRCbTixMHIOct95pLyta1Q5tPgrk`
+4. Check Railway logs for download errors
+
+### API Performance
+- **Model Loading**: The model takes ~30-60 seconds to load on first startup
+- **Prediction Time**: Each prediction takes 1-3 seconds depending on image size
+- **Memory Usage**: The model requires ~500MB RAM when loaded
+
 ## 📞 Support
 
 For issues and questions:
 - Create an issue in the repository
 - Check the API documentation at `/docs` when running locally
 - Review the health endpoint at `/health` for system status
+- Check Railway deployment logs for troubleshooting
+
+### Common Issues & Solutions
+
+| Issue | Solution |
+|-------|----------|
+| Model not loading | Check Google Drive link accessibility |
+| Slow predictions | Normal for first few requests (model warming up) |
+| Memory errors | Ensure sufficient RAM (500MB+ recommended) |
+| CORS errors | API supports CORS for web applications |
+| File upload errors | Check image format (JPEG, PNG supported) |
 
 ---
 
@@ -374,4 +442,7 @@ For issues and questions:
 
 ---
 
-**Note**: Make sure the `plant_species_CNN.h5` model file is present in the root directory for the API to function properly.
+**Note**: 
+- For local development: Download the `plant_species_Model.h5` model file from Google Drive and place it in the root directory
+- For deployment: The model is automatically downloaded from Google Drive during startup
+- Model file size: ~295MB (not included in repository due to size constraints)
