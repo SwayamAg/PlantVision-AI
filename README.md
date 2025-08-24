@@ -1,49 +1,47 @@
-# Plant Classification API
+# 🌿 Plant Species Classification API
 
-A FastAPI-based REST API for classifying house plants using a ResNet50 deep learning model. This API can identify 10 different types of house plants with high accuracy.
+A machine learning-powered web API for identifying different types of house plants from images. This project uses a Convolutional Neural Network (CNN) based on ResNet50 architecture trained on TensorFlow to classify plant images into 10 different categories.
 
-## 🌿 Supported Plant Classes
+## 🌱 Supported Plant Types
 
-1. Aloe Vera
-2. Areca Palm (Dypsis lutescens)
-3. Chinese evergreen (Aglaonema)
-4. English Ivy (Hedera helix)
-5. Jade plant (Crassula ovata)
-6. Money Tree (Pachira aquatica)
-7. Parlor Palm (Chamaedorea elegans)
-8. Rubber Plant (Ficus elastica)
-9. Snake plant (Sanseviera)
-10. ZZ Plant (Zamioculcas zamiifolia)
+The model can identify the following plant types:
+- **Aloe Vera** (Aloe vera)
+- **Areca Palm** (Dypsis lutescens)
+- **Chinese evergreen** (Aglaonema)
+- **English Ivy** (Hedera helix)
+- **Jade plant** (Crassula ovata)
+- **Money Tree** (Pachira aquatica)
+- **Parlor Palm** (Chamaedorea elegans)
+- **Rubber Plant** (Ficus elastica)
+- **Snake plant** (Sanseviera)
+- **ZZ Plant** (Zamioculcas zamiifolia)
 
-## 🚀 Features
+## ✨ Features
 
-- **Image Classification**: Upload images to get plant species predictions
-- **Multiple Input Formats**: Support for file uploads and base64 encoded images
-- **Confidence Scores**: Get prediction confidence for the top class
-- **Single Prediction**: Returns only the most likely plant species
-- **RESTful API**: Clean, documented API endpoints
-- **CORS Enabled**: Ready for web applications
-- **Health Checks**: Monitor API status and model loading
+- **FastAPI-based REST API** with automatic documentation
+- **Real-time image classification** with confidence scores
+- **Multiple input formats** - file uploads and base64 encoded images
+- **CORS support** for web applications
+- **Health check endpoint** for monitoring
+- **Comprehensive error handling** and logging
+- **Railway deployment ready** with Procfile
 
-## 🛠️ Tech Stack
+## 🚀 Quick Start
 
-- **FastAPI**: Modern, fast web framework for building APIs
-- **TensorFlow**: Deep learning framework for model inference
-- **ResNet50**: Pre-trained CNN architecture for image classification
-- **Pillow**: Image processing library
-- **Uvicorn**: ASGI server for production deployment
+###  **Live Demo**
+Your API is ready for deployment!
+- **API Base URL**: `https://your-railway-app.railway.app`
+- **Interactive Documentation**: `https://your-railway-app.railway.app/docs`
+- **Health Check**: `https://your-railway-app.railway.app/health`
 
-## 📋 Prerequisites
+### Prerequisites
 
 - Python 3.9.5
 - TensorFlow 2.10.0
 - FastAPI 0.109.0+
+- Other dependencies (see `requirements.txt`)
 
-> **Note**: This project is specifically configured for Python 3.9.5. The dependency versions have been carefully selected to ensure compatibility with this Python version.
-
-## 🚀 Quick Start
-
-### Local Development
+### Installation
 
 1. **Clone the repository**
    ```bash
@@ -56,100 +54,168 @@ A FastAPI-based REST API for classifying house plants using a ResNet50 deep lear
    pip install -r requirements.txt
    ```
 
-3. **Check your environment** (recommended)
-   ```bash
-   python check_environment.py
-   ```
+3. **Ensure the model file is present**
+   - The `plant_species_CNN.h5` model file should be in the root directory
+   - This is a trained ResNet50 model for plant classification
 
-4. **Run the application**
+### Running the API Locally
+
+1. **Start the FastAPI server**
    ```bash
    python app.py
    ```
 
-5. **Access the API**
-   - API Documentation: http://localhost:8000/docs
-   - Alternative Docs: http://localhost:8000/redoc
-   - Health Check: http://localhost:8000/health
+2. **Access the API**
+   - API will be available at: `http://localhost:8000`
+   - Interactive documentation: `http://localhost:8000/docs`
+   - Alternative docs: `http://localhost:8000/redoc`
+   - Health check: `http://localhost:8000/health`
 
-### Railway Deployment
-
-1. **Connect your GitHub repository to Railway**
-2. **Railway will automatically detect the Python project**
-3. **Deploy with one click**
-
-## 📚 API Endpoints
-
-### Base URL
-```
-https://your-railway-app.railway.app
-```
+## 📖 API Documentation
 
 ### Endpoints
 
-#### `GET /`
-- **Description**: Root endpoint with API information
-- **Response**: API status and available classes
+#### 1. **GET /** - Root endpoint
+Returns API information and available classes.
+```json
+{
+  "message": "Plant Species Classification API",
+  "classes": ["Aloe Vera", "Areca Palm", ...],
+  "total_classes": 10
+}
+```
 
-#### `GET /health`
-- **Description**: Health check endpoint
-- **Response**: Model loading status and class count
+#### 2. **GET /health** - Health check
+Returns the status of the API and model.
+```json
+{
+  "status": "healthy",
+  "model_loaded": true,
+  "classes_loaded": true,
+  "total_classes": 10
+}
+```
 
-#### `GET /classes`
-- **Description**: Get list of available plant classes
-- **Response**: Array of class names and count
+#### 3. **GET /classes** - Get available classes
+Returns list of supported plant classes.
+```json
+{
+  "classes": ["Aloe Vera", "Areca Palm", ...],
+  "count": 10
+}
+```
 
-#### `POST /predict`
-- **Description**: Predict plant species from uploaded image
-- **Input**: Image file (multipart/form-data)
-- **Response**: Prediction results with confidence scores
+#### 4. **POST /predict** - Image classification (file upload)
+Upload an image file to get plant classification.
 
-#### `POST /predict-base64`
-- **Description**: Predict plant species from base64 encoded image
-- **Input**: JSON with base64 image data
-- **Response**: Prediction results with confidence scores
+**Request:**
+- Method: `POST`
+- Content-Type: `multipart/form-data`
+- Body: Image file
 
-## 📖 API Usage Examples
+**Response:**
+```json
+{
+  "predicted_class": "Aloe Vera",
+  "confidence": 0.95
+}
+```
 
-### Using cURL
+#### 5. **POST /predict-base64** - Image classification (base64)
+Send base64 encoded image for plant classification.
 
-#### File Upload
+**Request:**
+- Method: `POST`
+- Content-Type: `application/json`
+- Body: `{"image": "base64_encoded_string"}`
+
+**Response:**
+```json
+{
+  "predicted_class": "Aloe Vera",
+  "confidence": 0.95
+}
+```
+
+### Example Usage
+
+#### Using curl (Live API)
 ```bash
+# File upload
 curl -X POST "https://your-railway-app.railway.app/predict" \
      -H "accept: application/json" \
      -H "Content-Type: multipart/form-data" \
-     -F "file=@plant_image.jpg"
-```
+     -F "file=@your_image.jpg"
 
-#### Base64 Image
-```bash
+# Base64 image
 curl -X POST "https://your-railway-app.railway.app/predict-base64" \
      -H "accept: application/json" \
      -H "Content-Type: application/json" \
      -d '{"image": "base64_encoded_image_string"}'
 ```
 
-### Using Python
-
+#### Using Python requests (Live API)
 ```python
 import requests
 
 # File upload
-with open('plant_image.jpg', 'rb') as f:
+with open('your_image.jpg', 'rb') as f:
     files = {'file': f}
     response = requests.post('https://your-railway-app.railway.app/predict', files=files)
-    print(response.json())
+    result = response.json()
+    print(f"Predicted: {result['predicted_class']}")
+    print(f"Confidence: {result['confidence']}")
 
 # Base64 image
 import base64
-with open('plant_image.jpg', 'rb') as f:
+with open('your_image.jpg', 'rb') as f:
     image_data = base64.b64encode(f.read()).decode('utf-8')
     response = requests.post('https://your-railway-app.railway.app/predict-base64', 
                            json={'image': image_data})
-    print(response.json())
+    result = response.json()
+    print(f"Predicted: {result['predicted_class']}")
+    print(f"Confidence: {result['confidence']}")
 ```
 
-### Using JavaScript
+#### Using curl (Local API)
+```bash
+# File upload
+curl -X POST "http://localhost:8000/predict" \
+     -H "accept: application/json" \
+     -H "Content-Type: multipart/form-data" \
+     -F "file=@your_image.jpg"
 
+# Base64 image
+curl -X POST "http://localhost:8000/predict-base64" \
+     -H "accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{"image": "base64_encoded_image_string"}'
+```
+
+#### Using Python requests (Local API)
+```python
+import requests
+
+# File upload
+with open('your_image.jpg', 'rb') as f:
+    files = {'file': f}
+    response = requests.post('http://localhost:8000/predict', files=files)
+    result = response.json()
+    print(f"Predicted: {result['predicted_class']}")
+    print(f"Confidence: {result['confidence']}")
+
+# Base64 image
+import base64
+with open('your_image.jpg', 'rb') as f:
+    image_data = base64.b64encode(f.read()).decode('utf-8')
+    response = requests.post('http://localhost:8000/predict-base64', 
+                           json={'image': image_data})
+    result = response.json()
+    print(f"Predicted: {result['predicted_class']}")
+    print(f"Confidence: {result['confidence']}")
+```
+
+#### Using JavaScript
 ```javascript
 // File upload
 const formData = new FormData();
@@ -160,7 +226,10 @@ fetch('https://your-railway-app.railway.app/predict', {
     body: formData
 })
 .then(response => response.json())
-.then(data => console.log(data));
+.then(data => {
+    console.log(`Predicted: ${data.predicted_class}`);
+    console.log(`Confidence: ${data.confidence}`);
+});
 
 // Base64 image
 const reader = new FileReader();
@@ -174,65 +243,98 @@ reader.onload = function() {
         body: JSON.stringify({image: base64Image})
     })
     .then(response => response.json())
-    .then(data => console.log(data));
+    .then(data => {
+        console.log(`Predicted: ${data.predicted_class}`);
+        console.log(`Confidence: ${data.confidence}`);
+    });
 };
 reader.readAsDataURL(fileInput.files[0]);
 ```
 
-## 📊 Response Format
+## 📊 Local Testing
 
-### Successful Prediction Response
-```json
-{
-  "predicted_class": "Aloe Vera",
-  "confidence": 0.95
-}
+Use the included `test_api.py` script for quick local testing:
+
+```bash
+# Test with a specific image
+python test_api.py path/to/your/image.jpg
+
+# Or modify the IMAGE_PATH variable in test_api.py
 ```
 
-## 🔧 Configuration
+## 🚀 Deployment
+
+### Railway Deployment
+
+This project is configured for Railway deployment:
+
+1. **Connect your GitHub repository to Railway**
+2. **Railway will automatically detect the Python project**
+3. **Deploy with one click**
 
 ### Environment Variables
-- `PORT`: Port number (automatically set by Railway)
-- `MODEL_PATH`: Path to the model file (default: `resnet_model_final.h5`)
-- `CLASSES_PATH`: Path to classes JSON file (default: `plant_classes.json`)
 
-### Python Version
-- **Runtime**: Python 3.9.5 (specified in `runtime.txt`)
-- **Compatibility**: All dependencies are tested and compatible with Python 3.9.5
+The API uses the following environment variables:
+- `PORT`: Port number (automatically set by Railway)
+- `MODEL_PATH`: Path to the model file (default: `plant_species_CNN.h5`)
+- `CLASSES_PATH`: Path to classes JSON file (default: `plant_classes.json`)
 
 ## 📁 Project Structure
 
 ```
 Plant_CNN/
-├── app.py                 # Main FastAPI application
-├── requirements.txt       # Python dependencies
-├── Procfile              # Railway deployment configuration
-├── runtime.txt           # Python version specification
-├── README.md             # Project documentation
-├── check_environment.py  # Environment compatibility checker
-├── test_api.py           # API testing script
-├── resnet_model_final.h5 # Trained model file
-├── plant_classes.json    # Class names mapping
-├── DATA/                 # Training data directory
-└── archive/              # Additional data directory
+├── app.py                           # FastAPI application with CORS support
+├── requirements.txt                 # Python dependencies and versions
+├── Procfile                         # Railway deployment config
+├── runtime.txt                      # Python runtime version (3.9.5)
+├── plant_species_CNN.h5            # Trained ResNet50 model
+├── plant_classes.json              # Class mapping configuration
+├── plant-species-classification-resnet50-eda.ipynb # Jupyter notebook for EDA
+├── README.md                       # Project documentation
+└── DATA/                           # Training data directory
 ```
+
+## 🔧 Model Information
+
+- **Architecture**: ResNet50 (Convolutional Neural Network)
+- **Framework**: TensorFlow 2.10.0
+- **Input Size**: 224x224 pixels
+- **Classes**: 10 house plant types
+- **Training**: Custom dataset with train/validation/test splits
+- **Python Version**: 3.9.5 (specifically configured)
+
+## 🛠️ Development
+
+### Adding New Plant Types
+
+1. Update the `plant_classes.json` file
+2. Retrain the model with new data
+3. Update the model file `plant_species_CNN.h5`
+
+### Model Training
+
+The training process is documented in `plant-species-classification-resnet50-eda.ipynb`. To retrain:
+
+1. Prepare your dataset in the `DATA/` directory
+2. Run the Jupyter notebook
+3. Replace `plant_species_CNN.h5` with the new model
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-## 📄 License
+## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - ResNet50 architecture for image classification
-- FastAPI for the excellent web framework
+- FastAPI team for the excellent web framework
 - Railway for seamless deployment
 - The plant dataset contributors
 
@@ -257,8 +359,19 @@ If you encounter dependency conflicts:
 
 ## 📞 Support
 
-If you encounter any issues or have questions, please open an issue on GitHub or contact the maintainers.
+For issues and questions:
+- Create an issue in the repository
+- Check the API documentation at `/docs` when running locally
+- Review the health endpoint at `/health` for system status
 
 ---
 
-**Happy Plant Classification! 🌱**
+## 👨‍💻 Made by Swayam
+
+- **LinkedIn**: [Swayam Agarwal](https://www.linkedin.com/in/swayam-agarwal/)
+- **GitHub**: [SwayamAg](https://github.com/SwayamAg)
+- **Repository**: [Plant Classification API](https://github.com/SwayamAg/Plant-Identification)
+
+---
+
+**Note**: Make sure the `plant_species_CNN.h5` model file is present in the root directory for the API to function properly.
