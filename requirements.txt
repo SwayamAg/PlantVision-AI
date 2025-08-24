@@ -9,3 +9,4 @@ pillow>=10.4.0
 requests>=2.32.3
 pydantic==1.10.15
 python-multipart>=0.0.9
+gdown>=5.2.0
